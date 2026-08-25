@@ -40,6 +40,7 @@ Feature: CAMARA Dedicated Network API, vwip - Areas API Operations
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceAreasPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/ServiceArea"
+    And each item in the response array has property "$.area" whose geometry contains the coordinates specified in "$.atLocation"
 
   @dedicated_network_areas_retrieveNetworkServiceAreas_03_success_filtered_by_overlappingArea_first_page
   Scenario: List first page of areas filtered by overlappingArea
@@ -53,6 +54,7 @@ Feature: CAMARA Dedicated Network API, vwip - Areas API Operations
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceAreasPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/ServiceArea"
+    And each item in the response array has property "$.area" whose geometry overlaps the area specified in "$.overlappingArea"
 
   @dedicated_network_areas_retrieveNetworkServiceAreas_04_success_filtered_by_coveringArea_first_page
   Scenario: List first page of areas filtered by coveringArea
@@ -66,6 +68,7 @@ Feature: CAMARA Dedicated Network API, vwip - Areas API Operations
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceAreasPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/ServiceArea"
+    And each item in the response array has property "$.area" whose geometry fully covers the area specified in "$.coveringArea"
 
   @dedicated_network_areas_retrieveNetworkServiceAreas_05_success_filtered_by_byName_first_page
   Scenario: List first page of areas filtered by byName
@@ -79,32 +82,35 @@ Feature: CAMARA Dedicated Network API, vwip - Areas API Operations
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceAreasPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/ServiceArea"
+    And each item in the response array has property "$.name" equal to the value specified in "$.byName"
 
   @dedicated_network_areas_retrieveNetworkServiceAreas_06_success_filtered_by_byNetworkProfileId_first_page
   Scenario: List first page of areas filtered by byNetworkProfileId
     Given the resource "/dedicated-network-areas/vwip/retrieve-service-areas"
     And the header "Content-Type" is set to "application/json"
     And the request body is set to a request body compliant with the schema at "/components/schemas/RetrieveServiceAreasRequest"
-    And the request body property "$.byNetworkProfileId" is set to a valid network profile
+    And the request body property "$.byNetworkProfileId" is set to a valid network profile ID
     When the request "retrieveNetworkServiceAreas" is sent
     Then the response status code is 200
     And the response header "Content-Type" is "application/json"
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceAreasPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/ServiceArea"
+    And each item in the response array has property "$.networkProfiles" containing the value specified in "$.byNetworkProfileId"
 
   @dedicated_network_areas_retrieveNetworkServiceAreas_07_success_filtered_by_byQosProfileName_first_page
   Scenario: List first page of areas filtered by byQosProfileName
     Given the resource "/dedicated-network-areas/vwip/retrieve-service-areas"
     And the header "Content-Type" is set to "application/json"
     And the request body is set to a request body compliant with the schema at "/components/schemas/RetrieveServiceAreasRequest"
-    And the request body property "$.byQosProfileName" is set to a valid qos profile
+    And the request body property "$.byQosProfileName" is set to a valid QoS profile name
     When the request "retrieveNetworkServiceAreas" is sent
     Then the response status code is 200
     And the response header "Content-Type" is "application/json"
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceAreasPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/ServiceArea"
+    And each item in the response array has property "$.qosProfiles" containing the value specified in "$.byQosProfileName"
 
   # Success scenarios for GET /areas/{areaId}
 

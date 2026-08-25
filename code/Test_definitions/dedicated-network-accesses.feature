@@ -6,7 +6,7 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
   #
   # Testing assets:
   # * At least one existing dedicated network
-  # * Valid device identifier (phoneNumber or networkAccessIdentifier)
+  # * Valid device identifier (phoneNumber)
   # * At least one existing network access
   #
   # References to OAS spec schemas refer to schemas specified in dedicated-network-accesses.yaml
@@ -52,7 +52,9 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/AccessInfosPage"
     And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/AccessInfo"
-    And each item in the response array has property "device" containing the device identifier information that corresponds to the device specified in the "x-device" header
+    # NOTE: The x-device filter is applied server-side. The AccessInfo schema does not expose a top-level
+    # "device" property, so the filter result cannot be directly verified from the response body.
+    # Device data is only available at "$.recentAccessDevices[*].device" which is capped at 100 entries.
 
   # Success scenarios for POST /accesses
 
@@ -69,7 +71,7 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
     And the response header "Content-Type" is "application/json"
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response header "Location" exists and contains a URL with the created access ID
-    And the response body complies with the OAS schema at "/components/schemas/AccessInfo"
+    And the response body complies with the OAS schema at "/components/schemas/CreateAccessSuccess"
     And the response property "$.networkId" has the same value as in the request body
     And the response property "$.id" exists and is a valid UUID
     And the response property "$.stats" exists and complies with the OAS schema at "/components/schemas/AccessStats"
