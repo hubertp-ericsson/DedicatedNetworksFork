@@ -6,6 +6,12 @@ Feature: CAMARA Dedicated Network API, vwip - Areas API Operations
   #
   # Testing assets:
   # * At least one existing area
+  # * Valid area name (for byName filter testing)
+  # * Valid network profile ID (for byNetworkProfileId filter testing)
+  # * Valid QoS profile name (for byQosProfileName filter testing)
+  # * Valid coordinates (latitude, longitude for atLocation filter testing)
+  # * A non-existent UUID (for 404 error testing)
+  # * A malformed UUID (for 400 error testing)
   #
   # References to OAS spec schemas refer to schemas specified in dedicated-network-areas.yaml
 
@@ -117,7 +123,7 @@ Feature: CAMARA Dedicated Network API, vwip - Areas API Operations
     And the response header "Content-Type" is "application/json"
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/ServiceArea"
-    And the response property "$.id" exists and is a valid UUID
+    And the response property "$.id" is equal to the path parameter "areaId"
 
   # Error scenarios
 
