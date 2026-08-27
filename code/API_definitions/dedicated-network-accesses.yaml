@@ -891,25 +891,14 @@ components:
         - $ref: "#/components/schemas/DeviceUnprocessableError"
         - $ref: "#/components/schemas/DeviceMaxExceededError"
 
-    DeviceErrorInfo:
-      description: Information about the error when processing a device
+    DeviceValidationError:
+      description: Error when device failed validation
       allOf:
         - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
           properties:
             device:
-              oneOf:
-                - $ref: "#/components/schemas/ValidDevice"
-                - $ref: "#/components/schemas/InvalidDevice"
-          required:
-            - device
-
-    DeviceValidationError:
-      description: Error when device failed validation
-      allOf:
-        - $ref: "#/components/schemas/DeviceErrorInfo"
-        - type: object
-          properties:
+              $ref: "#/components/schemas/InvalidDevice"
             status:
               enum:
                 - 400
@@ -921,9 +910,11 @@ components:
     DeviceNotFoundError:
       description: Error when device is not found
       allOf:
-        - $ref: "#/components/schemas/DeviceErrorInfo"
+        - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
           properties:
+            device:
+              $ref: "#/components/schemas/ValidDevice"
             status:
               enum:
                 - 404
@@ -935,9 +926,11 @@ components:
     DeviceConflictError:
       description: Error when device is in coflict with another resource
       allOf:
-        - $ref: "#/components/schemas/DeviceErrorInfo"
+        - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
           properties:
+            device:
+              $ref: "#/components/schemas/ValidDevice"
             status:
               enum:
                 - 409
@@ -950,9 +943,11 @@ components:
     DeviceUnprocessableError:
       description: Error when device can not be processed
       allOf:
-        - $ref: "#/components/schemas/DeviceErrorInfo"
+        - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
           properties:
+            device:
+              $ref: "#/components/schemas/ValidDevice"
             status:
               enum:
                 - 422
@@ -966,9 +961,11 @@ components:
     DeviceMaxExceededError:
       description: Error when device exceeds maximum naumber of allowed devices
       allOf:
-        - $ref: "#/components/schemas/DeviceErrorInfo"
+        - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
           properties:
+            device:
+              $ref: "#/components/schemas/ValidDevice"
             status:
               enum:
                 - 429
