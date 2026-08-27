@@ -303,12 +303,12 @@ components:
       description: Bad Request
       headers:
         x-correlator:
-          $ref: "#/components/headers/x-correlator"
+          $ref: "./common/CAMARA_common.yaml#/components/headers/x-correlator"
       content:
         application/json:
           schema:
             allOf:
-              - $ref: "#/components/schemas/ErrorInfo"
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
               - type: object
                 properties:
                   status:
@@ -336,12 +336,12 @@ components:
       description: Unauthorized
       headers:
         x-correlator:
-          $ref: "#/components/headers/x-correlator"
+          $ref: "./common/CAMARA_common.yaml#/components/headers/x-correlator"
       content:
         application/json:
           schema:
             allOf:
-              - $ref: "#/components/schemas/ErrorInfo"
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
               - type: object
                 properties:
                   status:
@@ -362,12 +362,12 @@ components:
       description: Forbidden
       headers:
         x-correlator:
-          $ref: "#/components/headers/x-correlator"
+          $ref: "./common/CAMARA_common.yaml#/components/headers/x-correlator"
       content:
         application/json:
           schema:
             allOf:
-              - $ref: "#/components/schemas/ErrorInfo"
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
               - type: object
                 properties:
                   status:
@@ -396,12 +396,12 @@ components:
       description: Not found
       headers:
         x-correlator:
-          $ref: "#/components/headers/x-correlator"
+          $ref: "./common/CAMARA_common.yaml#/components/headers/x-correlator"
       content:
         application/json:
           schema:
             allOf:
-              - $ref: "#/components/schemas/ErrorInfo"
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
               - type: object
                 properties:
                   status:
