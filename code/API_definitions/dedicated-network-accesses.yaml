@@ -1027,7 +1027,7 @@ components:
       allOf:
         - $ref: "../common/CAMARA_common.yaml#/components/schemas/Device"
         - required:
-          - phoneNumber
+            - phoneNumber
 
     Devices:
       description: A list of devices
