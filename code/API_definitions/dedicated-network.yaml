@@ -33,12 +33,12 @@ info:
 
     The API returns a networkId. The networkId is a unique identifier of the network, which remains unchanged during its lifetime. The networkId is required when creating Device Accesses.
 
-    Initially, the created network is in `REQUESTED` state. The network is only usable when the network is in `ACTIVATED` state. Find a detailed description of the network states [here]().
+    Initially, the created network is in `REQUESTED` state. The network is only usable when the network is in `ACTIVATED` state. Find a detailed description of the network states [here](../../documentation/API_documentation/DedicatedNetworks_GeneralDescription.md#states-of-the-network).
 
 
     # Querying one or more Networks
 
-    All available network of the API consumer can be queried by performing a `GET` operation on the `/networks` endpoint. The query can be filtered for networks matching a certain name.
+    All available networks of the API consumer can be queried by performing a `GET` operation on the `/networks` endpoint. The query can be filtered for networks matching a certain name.
 
     A specific network of the API consumer can be queried by performing a `GET` operation on the `/networks/{networkId}` endpoint, where the networkId has been obtained during the _create_ procedure.
 
@@ -193,7 +193,7 @@ paths:
                 - notificationsBearerAuth: []
       responses:
         '201':
-          description: Reception acknowlegement a dedicated network request
+          description: Successful creation of a dedicated network
           headers:
             x-correlator:
               $ref: "../common/CAMARA_common.yaml#/components/headers/x-correlator"
@@ -214,6 +214,10 @@ paths:
           $ref: "#/components/responses/Generic401"
         "403":
           $ref: "#/components/responses/Generic403"
+        '404':
+          $ref: "#/components/responses/Generic404"
+        '422':
+          $ref: "#/components/responses/UnprocessableServiceTime422"
 
   /networks/{networkId}:
     get:
@@ -405,10 +409,10 @@ components:
     NetworkStatus:
       description: |
         The current status of the requested network. The status can be one of the following:
-        * `REQUESTED` - The DN is requested, but not approved. Possible transitions to RESERVED, ACTIVATED and TERMINATED states
-        * `RESERVED` - Request is accepted by the CSP (CSP has committed the requested resources), but the Network cannot be used (outside of requested time-window)
-        * `ACTIVATED` - Network turns from reserved into Activated. Now, devices with access can use the network. Possible transitions to RESERVED or TERMINATED states
-        * `TERMINATED` - The Network resource is used and up for deletion. The API does not allow any action (except delete).
+        * `REQUESTED` - The network is requested, but not approved. Possible transitions to RESERVED, ACTIVATED and TERMINATED states.
+        * `RESERVED` - Request is accepted by the CSP (CSP has committed the requested resources), but the Network cannot be used (outside of requested time-window). Possible transitions to ACTIVATED and TERMINATED states.
+        * `ACTIVATED` - When the network is activated devices with access can use it. Transitions to TERMINATED state.
+        * `TERMINATED` - The network cannot be used any more and is up for deletion. The API does not allow any furher action except deletion.
 
       type: string
       enum:
@@ -586,7 +590,8 @@ components:
                   code:
                     enum:
                       - NOT_FOUND
-                      - IDENTIFIER_NOT_FOUND
+                      - DEDICATED_NETWORK.NETWORK_PROFILE_IDENTIFIER_NOT_FOUND
+                      - DEDICATED_NETWORK.SERVICE_AREA_IDENTIFIER_NOT_FOUND
           examples:
             GENERIC_404_NOT_FOUND:
               description: Resource is not found
@@ -594,12 +599,18 @@ components:
                 status: 404
                 code: NOT_FOUND
                 message: The specified resource is not found.
-            GENERIC_404_IDENTIFIER_NOT_FOUND:
-              description: Some identifier cannot be matched to a device
+            GENERIC_404_NETWORK_PROFILE_IDENTIFIER_NOT_FOUND:
+              description: Requested network profile identifier is not found
               value:
                 status: 404
-                code: IDENTIFIER_NOT_FOUND
-                message: Device identifier not found.
+                code: DEDICATED_NETWORK.NETWORK_PROFILE_IDENTIFIER_NOT_FOUND
+                message: Network profile identifier not found.
+            GENERIC_404_SERVICE_AREA_IDENTIFIER_NOT_FOUND:
+              description: Requested service area identifier is not found
+              value:
+                status: 404
+                code: DEDICATED_NETWORK.SERVICE_AREA_IDENTIFIER_NOT_FOUND
+                message: Service area identifier not found.
 
     Generic410:
       description: Gone
@@ -626,6 +637,32 @@ components:
                 status: 410
                 code: GONE
                 message: Access to the target resource is no longer available.
+
+    UnprocessableServiceTime422:
+      description: Unprocessable Service Time due to incorrect start and end times
+      headers:
+        x-correlator:
+          $ref: "../common/CAMARA_common.yaml#/components/headers/x-correlator"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+              - type: object
+                properties:
+                  status:
+                    enum:
+                      - 422
+                  code:
+                    enum:
+                      - DEDICATED_NETWORK.INCORRECT_SERVICE_TIME
+          examples:
+            DEDICATED_NETWORK_422_INCORRECT_SERVICE_TIME:
+              description: The request is syntacticaly correct but the service time in the request could not be processed successfully.
+              value:
+                status: 422
+                code: DEDICATED_NETWORK.INCORRECT_SERVICE_TIME
+                message: Requested service time could not be processed successfully.
 
   examples:
 

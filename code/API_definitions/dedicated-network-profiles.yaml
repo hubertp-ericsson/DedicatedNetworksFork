@@ -5,21 +5,21 @@ info:
 
     # Introduction
 
-    This API allows for discovering available network profiles, which are offered by the network provider to be used in conjunction of the Dedicated Network API. Network profiles describe the capabilities and performance targets of a dedicated network. For more information about the Dedicated Networks APIs, see [link]().
+    This API allows for discovering available network profiles, which are offered by the network provider to be used in conjunction of the Dedicated Network API. Network profiles describe the capabilities and performance targets of a dedicated network.
+
+    For more information about the Dedicated Network APIs, see the _GeneralDescription_ document in the Dedicated Networks [repository](https://github.com/camaraproject/DedicatedNetworks/).
 
     # Network Profiles
 
     A Network Profile represents a predefined set of network capabilities and performance characteristics that can be applied when creating a Network. It enables API Consumers to understand the capabilities they can expect when using the reserved network connectivity resources. A Network Profile is a validated, supported configuration that has been pre-approved between the API Provider and API Consumer.
 
-    A Network Profile contains information about the maximum number of devices allowed, the aggregated throughput to be provided, and a set of allowed QoS Profiles that devices can use when having access to the Dedicated Network. The concept of named QoS Profiles is re-used from the [QualityOnDemand](https://github.com/camaraproject/QualityOnDemand) API family. An API provider may offer the QualityOnDemand `qos-profiles` API for resolving a QoS Profile name into characteristics of a specific QoS profile.
+    A Network Profile contains information about the maximum number of devices allowed, the aggregated throughput to be provided, and a set of allowed QoS Profiles (including a default QoS Profile) that devices can use when having access to the Dedicated Network. The concept of named QoS Profiles is re-used from the [QualityOnDemand](https://github.com/camaraproject/QualityOnDemand) API family. An API provider may offer the QualityOnDemand `qos-profiles` API for resolving a QoS Profile name into characteristics of a specific QoS profile.
 
-    Network Profiles are designed to support different use-cases and should contain the matching `qos-profile` combinations. Generally, two types of Network Profiles can be identified
-      * Network Profiles containing only a `defaultQosProfile`
-      * Network Profiles containing one or more additional `qos-profile`s with the `qosProfiles` array. When multiple QoS Profiles are supported within one Network Profile, the QualityOnDemand `quality-on-demand` API may be used to assign one of the available QoS profiles to a specific device while the Network is in `ACTIVATED` state
+    A Network Profile is designed to be flexible to support use-cases which may require different `qos-profile` combinations.
 
-    Devices are not neccessarily using connectivity continuously. The value of the `maxNumberOfDevices` parameter should be set _generous_, considering that not all devices using connectivity simultaneously and/or continuously.
+    Devices are not necessarily using connectivity continuously. The value of the `maxNumberOfDevices` parameter should be set _generous_, considering that not all devices using connectivity simultaneously and/or continuously.
 
-    The parameters `aggregatedUlThroughput` and `aggregatedDlThroughput` define the (hard) limits of simultaneous connectivity usage, ie. sum of all traffic pertaining all devices using the available QoS profiles.
+    The parameters `aggregatedUlThroughput` and `aggregatedDlThroughput` define the (hard) limits of simultaneous connectivity usage, i.e. sum of all traffic pertaining all devices using the available QoS profiles.
 
     A detailed description of the individual parameters may be included within the _terms and conditions_ (outside of scope for the API).
 
@@ -114,7 +114,7 @@ paths:
         - $ref: "../common/CAMARA_common.yaml#/components/parameters/x-correlator"
       responses:
         '200':
-          description: List of available network profiles
+          description: List of available network profiles matching the given criteria and in the requested page (can be empty)
           headers:
             x-correlator:
               $ref: "../common/CAMARA_common.yaml#/components/headers/x-correlator"
@@ -155,7 +155,7 @@ paths:
         - $ref: "../common/CAMARA_common.yaml#/components/parameters/x-correlator"
       responses:
         '200':
-          description: List of available network profiles
+          description: Information about the network profile
           headers:
             x-correlator:
               $ref: "../common/CAMARA_common.yaml#/components/headers/x-correlator"
@@ -211,6 +211,7 @@ components:
         name:
           description: A human-readable name to describe the network profile
           type: string
+          minLength: 1
           maxLength: 1024
         maxNumberOfDevices:
           description: The maximum number of devices that can simultaneously use and share the dedicated network under this profile up to the limits set by the profile's performance characteristics
@@ -253,6 +254,9 @@ components:
           maximum: 1024
         unit:
           $ref: "#/components/schemas/BitRateUnitEnum"
+        required:
+          - value
+          - unit
 
     BitRateUnitEnum:
       description: Units of bitrate
@@ -398,9 +402,3 @@ components:
                 status: 404
                 code: NOT_FOUND
                 message: The specified resource is not found.
-            GENERIC_404_IDENTIFIER_NOT_FOUND:
-              description: Some identifier cannot be matched to a device
-              value:
-                status: 404
-                code: IDENTIFIER_NOT_FOUND
-                message: Device identifier not found.
