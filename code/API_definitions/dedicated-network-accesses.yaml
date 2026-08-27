@@ -650,11 +650,14 @@ components:
 
     RecentAccessDevices:
       description: |
-        A list of devices requested to be added to the access within either the `createAccess` operation or with the latest `addDevicesToAccess` operation, accepted for further processing, i.e. not immediately rejected due to an error condition and not removed by a more recent remove operation.
-        **NOTE:** the list is limited to a maximum of 100 devices and may therefore not be a complete list of access devices within an access.
+        Information about devices requested and accepted to be added to the access in the most recent `createAccess` or `addDevicesToAccess` operation.
+        These are the devices that were accepted for further processing, i.e. not immediately rejected due to an error condition and not removed by a more recent remove operation.
       type: object
       properties:
         recentAccessDevices:
+          description: |
+            A list of devices requested to be added to the access within either the `createAccess` operation or with the latest `addDevicesToAccess` operation, accepted for further processing, i.e. not immediately rejected due to an error condition and not removed by a more recent remove operation.
+            **NOTE:** the list is limited to a maximum of 100 devices and may therefore not be a complete list of access devices within an access.
           allOf:
             - $ref: "#/components/schemas/AccessDevices"
             - minItems: 1
@@ -665,7 +668,7 @@ components:
       type: object
       properties:
         device:
-          $ref: "#/components/schemas/Device"
+          $ref: "#/components/schemas/ValidDevice"
         status:
           $ref: "#/components/schemas/DeviceStatus"
         statusInfo:
@@ -728,7 +731,7 @@ components:
         - $ref: '#/components/schemas/ExtendedAccessInfo'
         - $ref: '#/components/schemas/ErrorResultsForDevices'
         - required:
-          - results
+            - results
 
     AccessStats:
       description: Statistical information for a dedicated network access
@@ -809,6 +812,7 @@ components:
         - devices
       properties:
         devices:
+          description: List of devices to be added to the access
           allOf:
             - $ref: "#/components/schemas/Devices"
             - minItems: 1
@@ -820,7 +824,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/RecentAccessDevices'
         - required:
-          - recentAccessDevices
+            - recentAccessDevices
 
     AddDevicesPartialSuccess:
       description: |
@@ -830,8 +834,8 @@ components:
         - $ref: '#/components/schemas/RecentAccessDevices'
         - $ref: "#/components/schemas/ErrorResultsForDevices"
         - required:
-          - recentAccessDevices
-          - results
+            - recentAccessDevices
+            - results
 
     RemoveDevicesRequest:
       description: Request body used to remove devices from an access
@@ -840,6 +844,7 @@ components:
         - devices
       properties:
         devices:
+          description: List of devices to be removed from the access
           allOf:
             - $ref: "#/components/schemas/Devices"
             - minItems: 1
@@ -853,7 +858,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/ErrorResultsForDevices"
         - required:
-          - results
+            - results
 
     ErrorResults:
       description: |
@@ -885,14 +890,6 @@ components:
         - $ref: "#/components/schemas/DeviceConflictError"
         - $ref: "#/components/schemas/DeviceUnprocessableError"
         - $ref: "#/components/schemas/DeviceMaxExceededError"
-      discriminator:
-        propertyName: status
-        mapping:
-          400: '#/components/schemas/DeviceValidationError'
-          404: '#/components/schemas/DeviceNotFoundError'
-          409: '#/components/schemas/DeviceConflictError'
-          422: "#/components/schemas/DeviceUnprocessableError"
-          429: "#/components/schemas/DeviceMaxExceededError"
 
     DeviceErrorInfo:
       description: Information about the error when processing a device
@@ -902,10 +899,10 @@ components:
           properties:
             device:
               oneOf:
-                - $ref: "#/components/schemas/Device"
+                - $ref: "#/components/schemas/ValidDevice"
                 - $ref: "#/components/schemas/InvalidDevice"
-            required:
-              - device
+          required:
+            - device
 
     DeviceValidationError:
       description: Error when device failed validation
@@ -948,7 +945,6 @@ components:
               enum:
                 - ABORTED
                 - ALREADY_EXISTS
-                - CONFLICT
                 - INCOMPATIBLE_STATE
 
     DeviceUnprocessableError:
@@ -1023,7 +1019,7 @@ components:
           required:
             - data
 
-    Device:
+    ValidDevice:
       description: |
         A device is identified by the CAMARA `device` object. Out of the four identifiers defined by the `device` object, this API supports the Phone Number assigned by the mobile network operator as the only option.
         NOTE1: Phone Number is the required identifier in a `device` object for this API. Any other identifier present in a `device` object received by this API will be silently ignored but will be retained and echoed back.
@@ -1038,7 +1034,7 @@ components:
       type: array
       maxItems: 9007199254740991
       items:
-        $ref: "#/components/schemas/Device"
+        $ref: "#/components/schemas/ValidDevice"
 
     SerializedDevice:
       description: |
@@ -1221,7 +1217,6 @@ components:
                     enum:
                       - ABORTED
                       - ALREADY_EXISTS
-                      - CONFLICT
                       - INCOMPATIBLE_STATE
           examples:
             GENERIC_409_ABORTED:
@@ -1236,12 +1231,6 @@ components:
                 status: 409
                 code: ALREADY_EXISTS
                 message: The resource that a client tried to create already exists.
-            GENERIC_409_CONFLICT:
-              description: Duplication of an existing resource
-              value:
-                status: 409
-                code: CONFLICT
-                message: A specified resource duplicate entry found.
             GENERIC_409_INCOMPATIBLE_STATE:
               description: A resource referenced in the request is in an incompatible state for the requested operation
               value:
@@ -1356,7 +1345,7 @@ components:
                   - device:
                       phoneNumber: "+491234500001"
                     status: 409
-                    code: CONFLICT
+                    code: ALREADY_EXISTS
                     message: Client specified a duplicate device identifier.
   examples:
 
