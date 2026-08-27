@@ -254,9 +254,9 @@ components:
           maximum: 1024
         unit:
           $ref: "#/components/schemas/BitRateUnitEnum"
-        required:
-          - value
-          - unit
+      required:
+        - value
+        - unit
 
     BitRateUnitEnum:
       description: Units of bitrate
