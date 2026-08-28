@@ -959,7 +959,7 @@ components:
                 - UNNECESSARY_IDENTIFIER
 
     DeviceMaxExceededError:
-      description: Error when device exceeds maximum naumber of allowed devices
+      description: Error when device exceeds maximum number of allowed devices
       allOf:
         - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
