@@ -1328,7 +1328,7 @@ components:
                       - DEDICATED_NETWORK_ACCESSES.NO_VALID_DEVICE
           examples:
             DEDICATED_NETWORK_ACCESSES_422_NO_VALID_DEVICE:
-              description: The request is syntacticaly correct but none of the devices given in the request could be processed successfully.
+              description: The request is syntactically correct but none of the devices given in the request could be processed successfully.
               value:
                 status: 422
                 code: DEDICATED_NETWORK_ACCESSES.NO_VALID_DEVICE
