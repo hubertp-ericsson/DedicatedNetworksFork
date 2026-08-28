@@ -216,8 +216,8 @@ Explainations
 The Access resource is created with a POST on the /accesses API including one or more devices.
 
 Once the access is created devices can be:
-- added to the access, by issuing a POST on the /accesses/{accessId}/devices collection endpoint
-- removed from the access, by issuing a DELETE on the /accesses/{accessId}/devices collection endpoint
+- added to the access, by issuing a POST on the /accesses/{accessId}/devices/add endpoint
+- removed from the access, by issuing a POST on the /accesses/{accessId}/devices/remove endpoint
 - queried, by issuing a GET on the /accesses/{accessId}/devices collection endpoint
 
 In the context of the access each device has a state to describe its own access to the dedicated network. The device's access states are: REQUESTED, GRANTED, and DENIED.
