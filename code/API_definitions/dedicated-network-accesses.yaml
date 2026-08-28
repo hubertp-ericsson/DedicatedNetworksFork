@@ -829,7 +829,7 @@ components:
     AddDevicesPartialSuccess:
       description: |
         Response body used when not all devices could be added successfully.
-        Devices added successfull are returned in `recentAccessDevices` while failed devices are listed in `results`.
+        Devices added successfully are returned in `recentAccessDevices` while failed devices are listed in `results`.
       allOf:
         - $ref: '#/components/schemas/RecentAccessDevices'
         - $ref: "#/components/schemas/ErrorResultsForDevices"
