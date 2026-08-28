@@ -412,7 +412,7 @@ components:
         * `REQUESTED` - The network is requested, but not approved. Possible transitions to RESERVED, ACTIVATED and TERMINATED states.
         * `RESERVED` - Request is accepted by the CSP (CSP has committed the requested resources), but the Network cannot be used (outside of requested time-window). Possible transitions to ACTIVATED and TERMINATED states.
         * `ACTIVATED` - When the network is activated devices with access can use it. Transitions to TERMINATED state.
-        * `TERMINATED` - The network cannot be used any more and is up for deletion. The API does not allow any furher action except deletion.
+        * `TERMINATED` - The network cannot be used any more and is up for deletion. The API does not allow any further action except deletion.
 
       type: string
       enum:
