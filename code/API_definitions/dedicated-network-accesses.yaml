@@ -924,7 +924,7 @@ components:
                 - IDENTIFIER_NOT_FOUND
 
     DeviceConflictError:
-      description: Error when device is in coflict with another resource
+      description: Error when device is in conflict with another resource
       allOf:
         - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
         - type: object
