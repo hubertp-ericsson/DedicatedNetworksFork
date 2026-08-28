@@ -590,6 +590,7 @@ components:
                   code:
                     enum:
                       - NOT_FOUND
+                      - DEDICATED_NETWORK.QOS_PROFILE_NAME_NOT_FOUND
                       - DEDICATED_NETWORK.NETWORK_PROFILE_IDENTIFIER_NOT_FOUND
                       - DEDICATED_NETWORK.SERVICE_AREA_IDENTIFIER_NOT_FOUND
           examples:
@@ -599,6 +600,12 @@ components:
                 status: 404
                 code: NOT_FOUND
                 message: The specified resource is not found.
+            GENERIC_404_QOS_PROFILE_NAME_NOT_FOUND:
+              description: Requested QoS profile name is not found
+              value:
+                status: 404
+                code: DEDICATED_NETWORK.QOS_PROFILE_NAME_NOT_FOUND
+                message: QoS profile name not found.
             GENERIC_404_NETWORK_PROFILE_IDENTIFIER_NOT_FOUND:
               description: Requested network profile identifier is not found
               value:
