@@ -658,7 +658,7 @@ components:
                       - DEDICATED_NETWORK.INCORRECT_SERVICE_TIME
           examples:
             DEDICATED_NETWORK_422_INCORRECT_SERVICE_TIME:
-              description: The request is syntacticaly correct but the service time in the request could not be processed successfully.
+              description: The request is syntactically correct but the service time in the request could not be processed successfully.
               value:
                 status: 422
                 code: DEDICATED_NETWORK.INCORRECT_SERVICE_TIME
