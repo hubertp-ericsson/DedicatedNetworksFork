@@ -7,6 +7,8 @@ Feature: CAMARA Dedicated Network API, vwip - Networks API Operations
   # Testing assets:
   # * Valid network profile ID
   # * Valid service time window
+  # * Valid service area ID (UUID of a pre-provisioned area)
+  # * Valid notification URL (sink)
   # * At least one existing dedicated network
   #
   # References to OAS spec schemas refer to schemas specified in dedicated-network.yaml
@@ -66,7 +68,7 @@ Feature: CAMARA Dedicated Network API, vwip - Networks API Operations
     And the response property "$.networkProfileId" has the same value as in the request body
     And the response property "$.serviceTime" has the same value as in the request body
     And the response property "$.serviceAreaId" has the same value as in the request body
-    And the response property "$.sink" exists only if provided in the request body and with the same value
+    And the response property "$.sink" has the same value as in the request body
 
   # Success scenarios for GET /networks/{networkId}
 

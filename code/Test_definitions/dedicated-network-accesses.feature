@@ -117,7 +117,7 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
     And the response header "Content-Type" is "application/json"
     And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/AccessDevicesPage"
-    And the response property "$.items" complies with the OAS schema at "/components/schemas/AccessDevices"
+    And the response property "$.items" is an array where each item complies with the OAS schema at "/components/schemas/AccessDevice"
 
   # Success scenarios for POST /accesses/{accessId}/devices/add
 
@@ -132,6 +132,8 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
     And the request body array contains one or more (up to 100) valid device objects
     When the request "addDevicesToAccess" is sent
     Then the response status code is 201
+    And the response header "Content-Type" is "application/json"
+    And the response header "x-correlator" has the same value as the request header "x-correlator"
     And the response body complies with the OAS schema at "/components/schemas/AddDevicesSuccess"
 
   # Success scenarios for POST /accesses/{accessId}/devices/remove
@@ -147,3 +149,4 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
     And the request body array contains one or more (up to 100) valid device objects
     When the request "removeDevicesFromAccess" is sent
     Then the response status code is 204
+    And the response header "x-correlator" has the same value as the request header "x-correlator"
