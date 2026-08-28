@@ -5,7 +5,7 @@ info:
 
     # Introduction
 
-    This API allows for discovering available network service areas, which are the geographical areas offered by the network provider where consitent coverage according to indicated network profile(s) and QoS profiles is provided, and which is to be used in conjunction with the Dedicated Network API.
+    This API allows for discovering available network service areas, which are the geographical areas offered by the network provider where consistent coverage according to indicated network profile(s) and QoS profiles is provided, and which is to be used in conjunction with the Dedicated Network API.
 
     For more information about the Dedicated Network APIs, see the _GeneralDescription_ document in the Dedicated Networks [repository](https://github.com/camaraproject/DedicatedNetworks/).
 
@@ -52,7 +52,7 @@ info:
 
     - `overlappingArea` - to return the network service areas whose geographical area overlaps (but does not fully cover) the input geographical area, where the input geographical area may be a circle or polygon
 
-    - `coveringArea` -  to return the network service areas whose geographical area fully covers the input geographical area will be returned, where the input geographical area may be a circle or polygon
+    - `coveringArea` -  to return the network service areas whose geographical area fully covers the input geographical area, where the input geographical area may be a circle or polygon
 
     - `byName` - to return the network service areas with a name matching exactly the input string
 
@@ -150,8 +150,6 @@ paths:
           $ref: "#/components/responses/Generic401"
         "403":
           $ref: "#/components/responses/Generic403"
-        "404":
-          $ref: "#/components/responses/Generic404"
 
   /areas/{areaId}:
     get:
@@ -263,6 +261,7 @@ components:
 
     ServiceArea:
       description: Common attributes of a service area, i.e. where the network service is supported
+      type: object
       properties:
         id:
           $ref: '#/components/schemas/ServiceAreaId'
@@ -308,7 +307,17 @@ components:
       content:
         application/json:
           schema:
-            $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+            allOf:
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+              - type: object
+                properties:
+                  status:
+                    enum:
+                      - 400
+                  code:
+                    enum:
+                      - INVALID_ARGUMENT
+                      - OUT_OF_RANGE
           examples:
             GENERIC_400_INVALID_ARGUMENT:
               description: Invalid Argument. Generic Syntax Exception
@@ -331,20 +340,23 @@ components:
       content:
         application/json:
           schema:
-            $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+            allOf:
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+              - type: object
+                properties:
+                  status:
+                    enum:
+                      - 401
+                  code:
+                    enum:
+                      - UNAUTHENTICATED
           examples:
             GENERIC_401_UNAUTHENTICATED:
-              description: Request cannot be authenticated
+              description: Request cannot be authenticated and a new authentication is required
               value:
                 status: 401
                 code: UNAUTHENTICATED
-                message: Request not authenticated due to missing, invalid, or expired credentials.
-            GENERIC_401_AUTHENTICATION_REQUIRED:
-              description: New authentication is needed, authentication is no longer valid
-              value:
-                status: 401
-                code: AUTHENTICATION_REQUIRED
-                message: New authentication is required.
+                message: Request not authenticated due to missing, invalid, or expired credentials. A new authentication is required.
 
     Generic403:
       description: Forbidden
@@ -354,7 +366,17 @@ components:
       content:
         application/json:
           schema:
-            $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+            allOf:
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+              - type: object
+                properties:
+                  status:
+                    enum:
+                      - 403
+                  code:
+                    enum:
+                      - PERMISSION_DENIED
+                      - INVALID_TOKEN_CONTEXT
           examples:
             GENERIC_403_PERMISSION_DENIED:
               description: Permission denied. OAuth2 token access does not have the required scope or when the user fails operational security
@@ -367,7 +389,8 @@ components:
               value:
                 status: 403
                 code: INVALID_TOKEN_CONTEXT
-                message: "{{field}} is not consistent with access token."
+                # message: "{{field}} is notconsistent with access token."
+                message: "Request body is not consistent with access token."
 
     Generic404:
       description: Not found
@@ -377,7 +400,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+            allOf:
+              - $ref: "../common/CAMARA_common.yaml#/components/schemas/ErrorInfo"
+              - type: object
+                properties:
+                  status:
+                    enum:
+                      - 404
+                  code:
+                    enum:
+                      - NOT_FOUND
           examples:
             GENERIC_404_NOT_FOUND:
               description: Resource is not found
