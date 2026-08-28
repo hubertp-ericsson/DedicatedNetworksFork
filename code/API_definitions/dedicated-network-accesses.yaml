@@ -871,7 +871,7 @@ components:
             - results
 
     ErrorResultsForDevices:
-      description: An object describing error results of an operation targetting multiple devices
+      description: An object describing error results of an operation targeting multiple devices
       type: object
       properties:
         results:
