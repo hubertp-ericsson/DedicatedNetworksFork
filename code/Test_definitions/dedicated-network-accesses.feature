@@ -88,7 +88,7 @@ Feature: CAMARA Dedicated Network API, vwip - Network Accesses API Operations
     Then the response status code is 200
     And the response header "Content-Type" is "application/json"
     And the response header "x-correlator" has the same value as the request header "x-correlator"
-    And the response body complies with the OAS schema at "/components/schemas/AccessInfo"
+    And the response body complies with the OAS schema at "/components/schemas/ExtendedAccessInfo"
     And the response property "$.id" is equal to the path parameter "accessId"
     And the response property "$.stats" complies with the OAS schema at "/components/schemas/AccessStats"
 
