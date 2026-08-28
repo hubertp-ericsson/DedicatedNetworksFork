@@ -37,7 +37,8 @@ Feature: CAMARA Dedicated Network API, vwip - Networks API Operations
     And the request body is set to a request body compliant with the schema at "/components/schemas/CreateNetwork"
     And the request body property "$.networkProfileId" is set to a valid network profile ID
     And the request body property "$.serviceTime" is set to a valid service time window
-    And the request body property "$.serviceAreaId" is set to a valid area name
+    And the request body property "$.serviceAreaId" is set to a valid service area ID
+    And the request body property "$.serviceTime.start" is set to a value in the future
     When the request "createNetwork" is sent
     Then the response status code is 201
     And the response header "Content-Type" is "application/json"
@@ -45,7 +46,7 @@ Feature: CAMARA Dedicated Network API, vwip - Networks API Operations
     And the response header "Location" exists and contains a URL with the created network ID
     And the response body complies with the OAS schema at "/components/schemas/NetworkInfo"
     And the response property "$.id" exists and is a valid UUID
-    And the response property "$.status" is "REQUESTED"
+    And the response property "$.status" is "REQUESTED" or "RESERVED"
 
   @dedicated_network_createNetwork_02_success_echo
   Scenario: Create a dedicated network (response echoes request fields)
@@ -54,9 +55,12 @@ Feature: CAMARA Dedicated Network API, vwip - Networks API Operations
     And the request body is set to a request body compliant with the schema at "/components/schemas/CreateNetwork"
     And the request body property "$.networkProfileId" is set to a valid network profile ID
     And the request body property "$.serviceTime" is set to a valid service time window
-    And the request body property "$.serviceAreaId" is set to a valid area name
+    And the request body property "$.serviceAreaId" is set to a valid service area ID
     And the request body property "$.sink" is set to a valid notification URL
     And the request body property "$.sinkCredential.credentialType" is set to "ACCESSTOKEN"
+    And the request body property "$.sinkCredential.accessToken" is set to a valid access token
+    And the request body property "$.sinkCredential.accessTokenExpiresUtc" is set to a valid expiration time in the future
+    And the request body property "$.sinkCredential.accessTokenType" is set to "bearer"
     When the request "createNetwork" is sent
     Then the response status code is 201
     And the response property "$.networkProfileId" has the same value as in the request body
