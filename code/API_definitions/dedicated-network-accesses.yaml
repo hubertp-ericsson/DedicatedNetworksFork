@@ -379,7 +379,6 @@ paths:
         required: true
         schema:
           $ref: "#/components/schemas/AccessId"
-      - $ref: "../common/CAMARA_common.yaml#/components/parameters/x-correlator"
     get:
       tags:
         - Devices
