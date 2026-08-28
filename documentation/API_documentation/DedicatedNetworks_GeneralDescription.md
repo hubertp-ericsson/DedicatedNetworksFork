@@ -193,10 +193,11 @@ stateDiagram-v2
     RESERVED --> ACTIVATED: Service Time reached
     ACTIVATED --> TERMINATED: Service Time expires
     REQUESTED --> ACTIVATED: Use is confirmed (Service Time already reached)
-    RESERVED --> TERMINATED: Failed to reserve resources
+    REQUESTED --> TERMINATED: Failed to reserve resources
+    RESERVED --> TERMINATED: Unexpected failure
 ```
 
-Explainations
+Explanations
 - A network in REQUESTED state is not (yet) committed by the Network Provider.
 
 - A network in RESERVED state is committed to be available for use during the Service Time by the Network Provider.
@@ -208,6 +209,8 @@ Explainations
 - The network may enter the ACTIVATED state directly after the REQUESTED state if the service start time has been reached when the API Provider successfully completed the resource reservation.
 
 - The network may enter the TERMINATED state directly after the REQUESTED state if the API Provider could not complete the resource reservation.
+
+- The network may enter the TERMINATED state directly after the RESERVED state if the API Provider could not keep the reserved resources due to an unexpected failure.
 
 - A network in TERMINATED state cannot be modified anymore and should be deleted. If not deleted by the API Consumer, the representing HTTP resource (URL) may be removed by the API Provider.
 
