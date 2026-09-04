@@ -428,10 +428,10 @@ paths:
           description: Only access devices with this status are to be returned
           schema:
             $ref: "#/components/schemas/DeviceStatus"
-        - $ref: "#/components/schemas/AddedAtOrAfter"
-        - $ref: "#/components/schemas/AddedAfter"
-        - $ref: "#/components/schemas/AddedAtOrBefore"
-        - $ref: "#/components/schemas/AddedBefore"
+        - $ref: "#/components/parameters/AddedAtOrAfter"
+        - $ref: "#/components/parameters/AddedAfter"
+        - $ref: "#/components/parameters/AddedAtOrBefore"
+        - $ref: "#/components/parameters/AddedBefore"
         - $ref: "../common/CAMARA_common.yaml#/components/parameters/x-correlator"
       responses:
         '200':
